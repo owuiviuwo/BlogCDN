@@ -1,0 +1,84 @@
+<% if (theme.valine && post.comments) { %>
+<div id="vcomments"></div>
+<script>
+  window.onload = function(){
+      var valine = new Valine();
+      valine.init({
+        el: '#vcomments',
+        appId: "<%= theme.v_appId %>",
+        appKey: "<%= theme.v_appKey %>",
+        path: window.location.pathname,
+        placeholder: "你是我一生只会遇见一次的惊喜 ..."
+      })
+  }
+</script>
+<% } %>
+
+<% if (theme.waline.enable && post.comments) { %>
+    <!--<script src="https://cdn.jsdelivr.net/npm/@waline/client"></script>-->
+	<script src="https://cdn.jsdelivr.net/npm/@waline/client/dist/waline.js"></script>
+	
+    <div id="waline"></div>
+    <style>
+    #waline textarea {
+        box-sizing: border-box;
+        background: url("<%- url_for(theme.waline.background) %>") 100% 100% no-repeat;
+    }
+    </style>
+    <script>
+        Waline({
+              el: '#waline',
+              serverURL: '<%- theme.waline.serverURL %>',
+              pageSize: '<%- theme.waline.pageSize %>',
+              lang: '<% if (config.language == "zh-cn") {  %>zh-CN<% } else { %>en<% } %>',
+              // requiredFields: ['nick','mail'], //设置必填项
+			  requiredMeta: ['nick','mail'], //设置必填项
+              //placeholder: '<%= theme.waline.placeholder %>',
+			  locale.placeholder: '<%= theme.waline.placeholder %>',
+              //visitor: '<%- theme.waline.visitor %>',
+			  pageview: '<%- theme.waline.visitor %>',
+              emoji: [
+                  'https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/tieba',
+                  'https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/bilibili',
+                  'https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/weibo',
+              ],
+              <!--avatar: '<%- theme.waline.avatar %>',-->
+              dark: 'auto',
+            });
+    </script>
+<% } %>
+
+<% if (theme.twikoo.enable && post.comments) { %>
+
+    <div id="tcomment"></div>
+	<style>
+	.el-textarea__inner{
+		height: 130px;
+	}
+	</style>
+    <script src="https://cdn.staticfile.org/twikoo/1.6.8/twikoo.all.min.js"></script>
+    <script>
+    window.onload = function () {
+      var loadTime = window.performance.timing.domContentLoadedEventEnd - window.performance.timing.navigationStart;
+      document.getElementById("page_loading_time").innerHTML = "It took me " + loadTime + "ms to meet you this time";
+      console.log('Page load time is ' + loadTime);
+      // var valine = new Valine();
+      // valine.init({
+      //   el: '#vcomments',
+      //   avatar: 'monsterid',
+      //   appId: "",
+      //   appKey: "",
+      //   path: window.location.pathname,
+      //   serverURL: "",
+      //   placeholder: "你是我一生只会遇见一次的惊喜"
+      // })
+        twikoo.init({
+          envId: 'https://vercel-for-blog.vercel.app/', // 腾讯云环境填 envId；Vercel 环境填地址（https://xxx.vercel.app）
+          el: '#tcomment', // 容器元素
+          // region: 'ap-guangzhou', // 环境地域，默认为 ap-shanghai，腾讯云环境填 ap-shanghai 或 ap-guangzhou；Vercel 环境不填
+          // path: location.pathname, // 用于区分不同文章的自定义 js 路径，如果您的文章路径不是 location.pathname，需传此参数
+          // lang: 'zh-CN', // 用于手动设定评论区语言，支持的语言列表 https://github.com/imaegoo/twikoo/blob/main/src/client/utils/i18n/index.js
+        })
+    }
+    </script>
+<% } %>

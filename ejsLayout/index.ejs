@@ -1,0 +1,99 @@
+<div class="blank" style="padding-top: 0px;"></div>
+<div id="content" class="site-content">
+  
+  
+  
+  
+  <!-- 格言与置顶通知 -->
+  <% if (theme.notice) { %>
+  <div class="notice" style="margin-top:60px">
+    <i class="iconfont icon-notification">
+    </i>
+    <!--<div class="notice-content"><%= theme.notice%></div>-->
+	<div class="notice-content">	
+	  <span id="hitokoto" style="margin-left:5px;"> :D 获取中...</span>
+      <p align="right" id="afrom"></p>
+      <script src="https://cdn.jsdelivr.net/npm/bluebird@3/js/browser/bluebird.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/whatwg-fetch@2.0.3/fetch.min.js"></script>
+      <script>
+        fetch('https://v1.hitokoto.cn/?c=a&c=b&c=c&c=d&c=e&c=f&c=g&c=h&c=i&c=j&c=k&c=l')
+          .then(function (res){
+            return res.json();
+          })
+          .then(function (data) {
+            var hitokoto = document.getElementById('hitokoto');
+            var afrom = document.getElementById('afrom');
+            hitokoto.innerText = data.hitokoto;
+			var datafrom = data.from == null ? '~' : data.from;
+			var datafromwho = data.from_who == null ? '~' : data.from_who;
+			if(datafrom!='~' || datafromwho!='~'){
+				afrom.innerText =  '——【 ' + datafrom + '  ' + datafromwho + ' 】';
+			}
+			else{
+				afrom.innerText =  '——【 ' + 'from unknown' + ' 】';
+			}
+            
+          })
+          .catch(function (err) {
+            console.error(err);
+          })
+      </script>
+	</div>	
+  </div>  
+  <% } %>
+  
+  <!--说说-->  
+  <div class="artitalk_part" style="margin-top:30px;margin-bottom:-70px;">
+   <style>
+	#readButton,
+	.power{
+		display:none !important;
+	}
+    </style>
+	  <!--<script src="https://cdn.jsdelivr.net/gh/drew233/cdn/js/jquery-3.3.1.min.js"></script>-->
+	  <!-- 如果之前引用过就不需要重复引用了 -->
+	  <!-- 引用 artitalk -->
+	  <h1 class="main-title" style="font-family: 'Ubuntu', sans-serif;">
+	  <i class="fa fa-snowflake-o" aria-hidden="true"></i>
+	  说说</h1>
+	  <script type="text/javascript" src="https://unpkg.com/artitalk"></script>
+	  <!-- 存放说说的容器 -->
+	  <div id="artitalk_main"></div>
+	  <script>
+		new Artitalk({
+		  appId: 'Bca3aRLRAJx2I6PNPDTapKBT-MdYXbMMI', // Your LeanCloud appId
+		  appKey: 'o1JOvsCvLL7SkH0kH1SeRXKK', // Your LeanCloud appKey
+		  color1: '#E6E6FA',
+		  color2: '#F0FFFF',
+		  color3: 'black',
+		  pageSize: 2
+		})
+	  </script>
+  </div>  
+  
+  
+  <!-- 置顶的文章以及全部的文章 -->
+  <%- partial('_partial/startdash') %>
+  <div id="primary" class="content-area">
+    <main id="main" class="site-main" role="main">
+	<!--置顶的文章-->
+      <h1 class="main-title" style="font-family: 'Ubuntu', sans-serif;">
+      <i class="fa fa-envira" aria-hidden="true"></i>
+      Discovery</h1>
+      <%- partial('_partial/archive', {pagination: 2, index: true}) %>
+    </main>
+    <!-- 首页默认取最最新文章集 -->
+    <!-- <% if (page.total > 1){ %>
+      <nav class="navigator">
+        <% var prev_text = __('prev');var next_text = __('next');%>
+        <%- paginator({
+          prev_text: prev_text,
+          next_text: next_text
+        }) %>
+      </nav>
+    <% } %> -->
+  </div>
+  <% if (page.total > 1 && page.next_link){ %>
+    <div id="pagination"><a href="<%- url_for(page.next_link) %>" class="">Previous</a></div>
+  <% } %>
+</div>
